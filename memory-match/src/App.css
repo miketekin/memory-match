@@ -1,10 +1,10 @@
 .App {
+  background-color: #282c34;
   text-align: center;
 }
 
 
 .App-header {
-  background-color: #282c34;
   min-height: 5vh;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,6 @@
 
 
 .App-body {
-  background-color: #282c34;
   min-height: 95vh;
   display: flex;
   flex-direction: column;
@@ -38,7 +37,6 @@
   min-width: 50vw;
   color: black;
   background: white;
-  border: 1px solid #999;
   grid-template-rows: 1fr;
   grid-template-columns: repeat(3,1fr);
   min-height: 3vh;
@@ -46,16 +44,24 @@
 
 
 .board-element {
-  border: 1px solid #999;
+  border: 1px solid black;
   align-content: center;
 }
 
+.start-button {
+  background: #0496ff;
+}
+
+.stop-button {
+  background: #d62828;
+}
 
 .input {
   border: 1px solid #999;
 }
 
 .timer {
+  background: #ced4da;
   justify-items: end;
 }
 
