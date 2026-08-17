@@ -70,17 +70,102 @@ function controlBoard() {
 function gameBoard({swappedIds}) {
   
   function Square({catId}) {
+    /*When a square gets clicked, it needs to flip over unless its already flipped over
+    If a square is already flipped over and another square is clicked then it needs to
+    be evaluated for a match
+    If two squares have already been flipped over and a third is clicked, any non matching
+    squares need to be flipped back over
+    
+    Need to have a map of square status'
+    The map needs to contain the squares position, state, id, and if a match has been found
+      Maybe this neesd to be split up into several maps
+      One map where the key is the id and the value is the matched status
+      One map where the key is the id and the value is the flipped status
+      We don't actually need to track position
+    When a square is clicked, check to see its state, if it's already flipped,
+    do nothing
+    If it's not already flipped, determine how many unmatched flipped squares there are
+    This set of unmatched flipped squares should be a second map
+    It will only ever contain 0, 1, or 2 elements
+    When determining how many unmatched flipped squares there are, if that number is 0 or 1
+    Add this square to the map
+    Once the map reaches two squares, perform an evaluation that would mark them as matched if
+    their ids match
+    If that number is 2, reset any unmatched+flipped squares and flip the newly clicked one
+    The square states must be tracked above the square function
+    The necessary operations would: flip, reset, mark match
+
+    Finally, we need something to determine if the final square is flipped - if so, stop
+    the timer and calculate the score (may cut this score/timer functionality depending on time)
+    
+    What controls the actual flip action? useState hook
+    */
+    
+    const [faceState, setFaceState] = useState("Down") 
+    function onSquareClick() {
+      if (faceState == "Down") {
+        setFaceState("Up")
+        //check number of squares using map.size
+        if (selectedSquares.size == 0) {
+          selectedSquares.set(1, catId)
+        }
+        else if (selectedSquares.size == 1) {
+          if (catId == selectedSquares.get(1)) {
+            matchedSquares.set(catId, true)
+          }
+        }
+        else {
+          selectedSquares.clear()
+          selectedSquares.set(1, catId)
+          //reset any unmatched squares
+        }
+      } else {
+        setFaceState("Down")
+      }
+    }
+    console.log(selectedSquares)
+    console.log(matchedSquares)
     const basePath = "https://cataas.com/cat/"
     const params = "?type=square&position=center"
-    const fullPath = basePath+catId+params
+    let fullPath = basePath+catId+params
+    if (faceState == "Down") {
+      fullPath = "./src/assets/cat-svg.svg"
+    }
     return (
       <img 
       src={fullPath}
       className="square"
-      onClick={() => console.log("clicked")}
+      onClick={onSquareClick}
+      //onClick={() => console.log("clicked")}
       ></img>
     )
   }
+  /*
+  What controls resetting unmatched squares?
+  Need a function that adds to a map of matched squares and resets that map
+  How would we reset the map? map.clear()
+  How do we add to a map? map.set(key, value)
+
+  The process: add squares to the selectedSquares map until it has two entries
+  If this is the first square, simply add it to the selectedSquares map
+  If this is the second square, check if they are a match
+    if they are a match, update the squares dictionary
+  If this is the third square, clear the selectedSquares map,
+   and add the new square, reset any unmatched squares
+
+  Operations:
+  Check the number of squares in the selectedSquares map using map.size
+  Check if the ids of the squares match
+  Check the matchedSquares map
+  Update the matchedSquares map
+  Clear the selectedSquares map
+  Clear the matchedSquares map
+  */
+ let matchedSquares = new Map()
+ let selectedSquares = new Map()
+ function checkMatches() {
+  return;
+ }
 
   return (
     <div className="game-board">
