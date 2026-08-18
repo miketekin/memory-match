@@ -1,67 +1,16 @@
-/*
-When a square gets clicked, it needs to flip over unless its already flipped over
-If a square is already flipped over and another square is clicked then it needs to
-be evaluated for a match
-If two squares have already been flipped over and a third is clicked, any non matching
-squares need to be flipped back over
-
-Need to have a map of square status'
-The map needs to contain the squares position, state, id, and if a match has been found
-  Maybe this neesd to be split up into several maps
-  One map where the key is the id and the value is the matched status
-  One map where the key is the id and the value is the flipped status
-  We don't actually need to track position
-When a square is clicked, check to see its state, if it's already flipped,
-do nothing
-If it's not already flipped, determine how many unmatched flipped squares there are
-This set of unmatched flipped squares should be a second map
-It will only ever contain 0, 1, or 2 elements
-When determining how many unmatched flipped squares there are, if that number is 0 or 1
-Add this square to the map
-Once the map reaches two squares, perform an evaluation that would mark them as matched if
-their ids match
-If that number is 2, reset any unmatched+flipped squares and flip the newly clicked one
-The square states must be tracked above the square function
-The necessary operations would: flip, reset, mark match
-
-Finally, we need something to determine if the final square is flipped - if so, stop
-the timer and calculate the score (may cut this score/timer functionality depending on time)
-
-What controls the actual flip action? useState hook
-*/
-
-/*
-The process: add squares to the selectedSquares map until it has two entries
-If this is the first square, simply add it to the selectedSquares map
-If this is the second square, check if they are a match
-  if they are a match, update the squares dictionary
-If this is the third square, clear the selectedSquares map,
-  and add the new square, reset any unmatched squares
-
-Operations:
-Check the number of squares in the selectedSquares map using map.size
-Check if the ids of the squares match
-Check the matchedSquares map
-Update the matchedSquares map
-Clear the selectedSquares map
-Clear the matchedSquares map
-*/
-
 import { useState, useEffect } from 'react';
 import './App.css';
 
 
 function randomize(catIds) {
-  console.log("RANDOMIZE")
+  //console.log("randomize")
   let arrayCopy = catIds
   for (let i = 11; i >= 0; i--) {
-    //console.log([i, arrayCopy])
     let tmp = arrayCopy[i]
     let randomInt = getRandomInt(i)
     arrayCopy[i] = arrayCopy[randomInt]
     arrayCopy[randomInt] = tmp
   }
-  //console.log(arrayCopy)
   return arrayCopy;
 }
 
@@ -89,6 +38,8 @@ function controlBoard() {
   let buttonClass = "start-button"
   const [timer, setTimer] = useState(false);
   const time = 0;
+
+  
   function onActivityClick() {
     if (activity == "Start") {
       setActivity("Stop")
@@ -117,21 +68,16 @@ function controlBoard() {
 }
 
 function gameBoard({swappedIds}) {
-  console.log(["gameBoard", swappedIds])
+  //console.log(["gameBoard", swappedIds])
 
   function Square({ index, catId, flipped, matched, onClick }) {
-    //const [faceState, setFaceState] = useState("Down") 
-    console.log(["Square Function", index])
+    //console.log(["Square Function", index])
     const basePath = "https://cataas.com/cat/"
     const params = "?type=square&position=center"
     let fullPath = basePath+catId+params
     if (!flipped && !matched) {
       fullPath = "./src/assets/cat-svg.svg"
     }
-    // if (faceState == "Down") {
-    //   fullPath = "./src/assets/cat-svg.svg"
-    // }
-    console.log(["square log", "index", index, "catid", catId])
     return (
       <img 
       src={fullPath}
@@ -142,51 +88,48 @@ function gameBoard({swappedIds}) {
     )
   }
 
-
   function onSquareClick(index, id) {
     console.log(["onSquareClick", index, id])
     let tempSquares = [...squares]
     let flippedSquares = []
-    console.log(flippedSquares)
+    console.log(["flippedSquares Starting", flippedSquares])
+    console.log(["tempSquares Starting", tempSquares])
+
     //Check to see if the current square is face up
     if (tempSquares[index]['flipped'] || tempSquares[index]['matched']) {
       return;
     }
+
     else {
       //Create a list of flipped squares
+
+      //When a square is clicked, derive the flipped squares from the array of squares
       for (let i = 0; i < tempSquares.length; ++i) {
         if (tempSquares[i]['flipped']) {
-          console.log(["tempSquares[i]", tempSquares[i]])
           flippedSquares.push(i)
         }
       }      
-      //If this is the first one, flip it
+      //If this is the first one, just flip it
       if (flippedSquares.length == 0) {
         tempSquares[index]['flipped'] = true
       }
-
-      //If one already exists, check if there's a match
+      //If there is only one, flip it then check if there's a match
       else if (flippedSquares.length == 1) {
-        //If there is only one flipped, go ahead and flip this one
-        //tempSquares[index]['flipped'] = true
-
-        //If there is a match
+        tempSquares[index]['flipped'] = true
         if (tempSquares[flippedSquares[0]]['id'] == id) {
           tempSquares[flippedSquares[0]]['matched'] = true
           tempSquares[index]['matched'] = true
         }
-        else {
-          tempSquares[index]['flipped'] = true
-        }
       }
-      //If there are already two, flip the others over and flip 
+      //If there are already two, clear the existing flips and flip the clicked one
       else {
         tempSquares[flippedSquares[0]]['flipped'] = false
         tempSquares[flippedSquares[1]]['flipped'] = false
         tempSquares[index]['flipped'] = true
       }
     }
-    console.log(tempSquares)
+    //console.log(["flippedSquares Final", flippedSquares])
+    //console.log(["tempSquares Final", tempSquares])
     setSquares(tempSquares)
   }
 
@@ -205,12 +148,13 @@ function gameBoard({swappedIds}) {
     }, [swappedIds]
   );
 
+
   if (squares.length < 11) {
     return (
       <div>Loading</div>
     )
   }
-  console.log(["swappedIds", swappedIds, "squares", squares])
+
   return (
     <div className="game-board">
       <div className="board-row">
@@ -237,7 +181,6 @@ function gameBoard({swappedIds}) {
 
 
 function App() {
-
   const [swappedIds, setSwappedIds] = useState();
   const skipMax: number = 1975;
   const skip: number = getRandomInt(skipMax)
