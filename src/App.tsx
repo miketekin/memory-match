@@ -35,7 +35,7 @@ function controlBoard(reset: () => void) {
 
   */ 
   //const [activity, setActivity] = useState("Start");
-  const [activity, setActivity] = useState("Reset");
+  //const [activity, setActivity] = useState("Reset");
 
   //let buttonClass = "start-button"
   let buttonClass = "reset-button"
@@ -64,7 +64,7 @@ function controlBoard(reset: () => void) {
   // }
   
   return(
-    <div className={buttonClass} onClick={onActivityClick}>{activity}</div>
+    <div className={buttonClass} onClick={onActivityClick}>Reset</div>
   )
   // return(
   //   <div className="control-board">
