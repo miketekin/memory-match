@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import catSvg from './assets/cat-svg.svg'
 
 
 function randomize(catIds: Array<string>) {
@@ -84,7 +85,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
     const params = "?type=square&position=center"
     let fullPath = basePath+catId+params
     if (!flipped && !matched) {
-      fullPath = "./src/assets/cat-svg.svg"
+      fullPath = catSvg
     }
     return (
       <img 
