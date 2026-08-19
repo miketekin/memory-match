@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 
-function randomize(catIds) {
+function randomize(catIds: Array<string>) {
   //console.log("randomize")
   let arrayCopy = catIds
   for (let i = 11; i >= 0; i--) {
@@ -67,11 +67,11 @@ function controlBoard() {
   )
 }
 
-function gameBoard({swappedIds}) {
+function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   //console.log(["gameBoard", swappedIds])
 
-  function Square({ index, catId, flipped, matched, onClick }) {
-    //console.log(["Square Function", index])
+  function Square({ index, catId, flipped, matched, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, onClick: (index: number, catId: string) => void}) {
+    console.log(["Square Function", index, catId])
     const basePath = "https://cataas.com/cat/"
     const params = "?type=square&position=center"
     let fullPath = basePath+catId+params
@@ -88,10 +88,10 @@ function gameBoard({swappedIds}) {
     )
   }
 
-  function onSquareClick(index, id) {
+  function onSquareClick(index: number, id: string) {
     console.log(["onSquareClick", index, id])
     let tempSquares = [...squares]
-    let flippedSquares = []
+    let flippedSquares: Array<number> = []
     console.log(["flippedSquares Starting", flippedSquares])
     console.log(["tempSquares Starting", tempSquares])
 
@@ -133,9 +133,16 @@ function gameBoard({swappedIds}) {
     setSquares(tempSquares)
   }
 
-  let [squares, setSquares] = useState([])
+  interface item {
+    id: string,
+    matched: boolean,
+    flipped: boolean
+  }
+
+  let [squares, setSquares] = useState<item[]>([])
 
   useEffect(() => {
+    squares = []
     for (const id in swappedIds) {
       const item = {
         id: swappedIds[id],
@@ -144,6 +151,7 @@ function gameBoard({swappedIds}) {
       }
       squares.push(item)
     }
+    
     setSquares(squares)
     }, [swappedIds]
   );
@@ -181,14 +189,14 @@ function gameBoard({swappedIds}) {
 
 
 function App() {
-  const [swappedIds, setSwappedIds] = useState();
+  const [swappedIds, setSwappedIds] = useState<string[]>([""]);
   const skipMax: number = 1975;
   const skip: number = getRandomInt(skipMax)
   
   useEffect(() => {
     fetch("https://cataas.com/api/cats?limit=6&skip="+skip)
     .then((result) => result.json())
-    .then((json) => json.map(({id}) => id))
+    .then((json) => json.map(({id}: {id: string}) => id))
     .then((catIds) => catIds.concat(catIds))
     .then((catIds) => setSwappedIds(randomize(catIds)))
     }, []
