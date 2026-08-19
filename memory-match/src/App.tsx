@@ -20,7 +20,7 @@ function getRandomInt(max: number) {
 }
 
 
-function controlBoard() {
+function controlBoard(reset: () => void) {
   /* how does a timer work?
     when the timers state is true, it increments by 1 every second
     how do we increment by 1 every second?
@@ -34,44 +34,52 @@ function controlBoard() {
     If we're already running something every second, then we could just increment using that
 
   */ 
-  const [activity, setActivity] = useState("Start");
-  let buttonClass = "start-button"
-  const [timer, setTimer] = useState(false);
-  const time = 0;
+  //const [activity, setActivity] = useState("Start");
+  const [activity, setActivity] = useState("Reset");
+
+  //let buttonClass = "start-button"
+  let buttonClass = "reset-button"
+  //const [timer, setTimer] = useState(false);
+  //const time = 0;
 
   
   function onActivityClick() {
-    if (activity == "Start") {
-      setActivity("Stop")
-      setTimer(true)
-    }
-    else {
-      setActivity("Start")
-      setTimer(false)
-    }
+    // console.log("onActivityClick")
+    // if (activity == "Start") {
+    //   setActivity("Stop")
+    //   setTimer(true)
+    // }
+    // else {
+    //   setActivity("Start")
+    //   setTimer(false)
+    // }
+    reset()
   }
 
-  if (activity == "Start") {
-    buttonClass = "board-element start-button"
-  }
-  else {
-    buttonClass = "board-element stop-button"
-  }
+  // if (activity == "Start") {
+  //   buttonClass = "board-element start-button"
+  // }
+  // else {
+  //   buttonClass = "board-element stop-button"
+  // }
   
   return(
-    <div className="control-board">
-        <div className={buttonClass} onClick={onActivityClick}>{activity}</div>
-        <div className="board-element timer">Time: 0.0</div>
-        <div className="board-element timer">Score: 0.0</div>
-    </div>
+    <div className={buttonClass} onClick={onActivityClick}>{activity}</div>
   )
+  // return(
+  //   <div className="control-board">
+  //       <div className={buttonClass} onClick={onActivityClick}>{activity}</div>
+  //       <div className="board-element timer">Time: 0.0</div>
+  //       <div className="board-element timer">Score: 0.0</div>
+  //   </div>
+  // )
 }
 
 function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   //console.log(["gameBoard", swappedIds])
 
   function Square({ index, catId, flipped, matched, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, onClick: (index: number, catId: string) => void}) {
-    console.log(["Square Function", index, catId])
+    //console.log(["Square Function", index, catId])
     const basePath = "https://cataas.com/cat/"
     const params = "?type=square&position=center"
     let fullPath = basePath+catId+params
@@ -89,11 +97,11 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   }
 
   function onSquareClick(index: number, id: string) {
-    console.log(["onSquareClick", index, id])
+    //console.log(["onSquareClick", index, id])
     let tempSquares = [...squares]
     let flippedSquares: Array<number> = []
-    console.log(["flippedSquares Starting", flippedSquares])
-    console.log(["tempSquares Starting", tempSquares])
+    //console.log(["flippedSquares Starting", flippedSquares])
+    //console.log(["tempSquares Starting", tempSquares])
 
     //Check to see if the current square is face up
     if (tempSquares[index]['flipped'] || tempSquares[index]['matched']) {
@@ -142,6 +150,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   let [squares, setSquares] = useState<item[]>([])
 
   useEffect(() => {
+    console.log("setSquares useEffect")
     squares = []
     for (const id in swappedIds) {
       const item = {
@@ -162,6 +171,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
       <div>Loading</div>
     )
   }
+  console.log(squares)
 
   return (
     <div className="game-board">
@@ -188,6 +198,8 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 }
 
 
+
+
 function App() {
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
   const skipMax: number = 1975;
@@ -202,6 +214,12 @@ function App() {
     }, []
   );
 
+  function reset() {
+    console.log("reset")
+    let newSwappedIds = [...swappedIds]
+    setSwappedIds(randomize(newSwappedIds))
+  }
+
   return(
   <div className="App">
     <header className="App-header">
@@ -215,7 +233,7 @@ function App() {
 
     <div className="App-body">
       <div>
-        {controlBoard()}
+        {controlBoard(reset)}
       </div>
       <div className="game-board">
         {gameBoard({swappedIds})}

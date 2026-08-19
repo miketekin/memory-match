@@ -42,6 +42,14 @@
   min-height: 3vh;
 }
 
+.reset-button {
+  background: #d62828;
+  margin-bottom: 60px;
+  min-width: 15vw;
+  min-height: 3vh;
+  align-content: center;
+
+}
 
 .board-element {
   border: 1px solid black;
