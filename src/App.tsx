@@ -4,7 +4,6 @@ import catSvg from './assets/cat-svg.svg'
 
 
 function randomize(catIds: Array<string>) {
-  //console.log("randomize")
   let arrayCopy = catIds
   for (let i = 11; i >= 0; i--) {
     let tmp = arrayCopy[i]
@@ -77,32 +76,25 @@ function controlBoard(reset: () => void) {
 }
 
 function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
-  //console.log(["gameBoard", swappedIds])
 
-  function Square({ index, catId, flipped, matched, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, onClick: (index: number, catId: string) => void}) {
-    //console.log(["Square Function", index, catId])
-    const basePath = "https://cataas.com/cat/"
-    const params = "?type=square&position=center"
-    let fullPath = basePath+catId+params
+  function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
     if (!flipped && !matched) {
-      fullPath = catSvg
+      blobPath = catSvg
     }
+
     return (
       <img 
-      src={fullPath}
+      src={blobPath}
       className="square"
       onClick={() => onClick(index, catId)}
-      //onClick={() => console.log("clicked")}
       ></img>
     )
   }
 
   function onSquareClick(index: number, id: string) {
-    //console.log(["onSquareClick", index, id])
+
     let tempSquares = [...squares]
     let flippedSquares: Array<number> = []
-    //console.log(["flippedSquares Starting", flippedSquares])
-    //console.log(["tempSquares Starting", tempSquares])
 
     //Check to see if the current square is face up
     if (tempSquares[index]['flipped'] || tempSquares[index]['matched']) {
@@ -137,37 +129,47 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
         tempSquares[index]['flipped'] = true
       }
     }
-    //console.log(["flippedSquares Final", flippedSquares])
-    //console.log(["tempSquares Final", tempSquares])
+
     setSquares(tempSquares)
   }
 
   interface item {
     id: string,
     matched: boolean,
-    flipped: boolean
+    flipped: boolean,
+    blobPath: string
   }
 
   let [squares, setSquares] = useState<item[]>([])
 
+
+  const basePath = "https://cataas.com/cat/"
+  const params = "?type=square&position=center"
+
   useEffect(() => {
-    console.log("setSquares useEffect")
     squares = []
     for (const id in swappedIds) {
-      const item = {
-        id: swappedIds[id],
-        matched: false,
-        flipped: false
-      }
-      squares.push(item)
+      console.log("swapped", swappedIds[id])
+      let blobPath = null
+      fetch(basePath+swappedIds[id]+params)
+      .then(res=>res.blob())
+      .then(blob=>{
+        blobPath = URL.createObjectURL(blob)
+        const item = {
+          id: swappedIds[id],
+          matched: false,
+          flipped: false,
+          blobPath: blobPath
+        }
+        squares.push(item)
+        let tempSquares = [...squares]
+        setSquares(tempSquares)
+      })
     }
-    
-    setSquares(squares)
-    }, [swappedIds]
-  );
+  }, [swappedIds]);
 
 
-  if (squares.length < 11) {
+  if (squares.length < 12) {
     return (
       <div>Loading</div>
     )
@@ -177,22 +179,22 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   return (
     <div className="game-board">
       <div className="board-row">
-        <Square index = {0} catId = {squares[0]['id']} flipped = {squares[0]['flipped']} matched = {squares[0]['matched']} onClick = {onSquareClick}/>
-        <Square index = {1} catId = {squares[1]['id']} flipped = {squares[1]['flipped']} matched = {squares[1]['matched']} onClick = {onSquareClick}/>
-        <Square index = {2} catId = {squares[2]['id']} flipped = {squares[2]['flipped']} matched = {squares[2]['matched']} onClick = {onSquareClick}/>
-        <Square index = {3} catId = {squares[3]['id']} flipped = {squares[3]['flipped']} matched = {squares[3]['matched']} onClick = {onSquareClick}/>
+        <Square index = {0} catId = {squares[0]['id']} flipped = {squares[0]['flipped']} matched = {squares[0]['matched']} blobPath = {squares[0]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {1} catId = {squares[1]['id']} flipped = {squares[1]['flipped']} matched = {squares[1]['matched']} blobPath = {squares[1]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {2} catId = {squares[2]['id']} flipped = {squares[2]['flipped']} matched = {squares[2]['matched']} blobPath = {squares[2]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {3} catId = {squares[3]['id']} flipped = {squares[3]['flipped']} matched = {squares[3]['matched']} blobPath = {squares[3]['blobPath']} onClick = {onSquareClick}/>
       </div>
       <div className="board-row">
-        <Square index = {4} catId = {squares[4]['id']} flipped = {squares[4]['flipped']} matched = {squares[4]['matched']} onClick = {onSquareClick}/>
-        <Square index = {5} catId = {squares[5]['id']} flipped = {squares[5]['flipped']} matched = {squares[5]['matched']} onClick = {onSquareClick}/>
-        <Square index = {6} catId = {squares[6]['id']} flipped = {squares[6]['flipped']} matched = {squares[6]['matched']} onClick = {onSquareClick}/>
-        <Square index = {7} catId = {squares[7]['id']} flipped = {squares[7]['flipped']} matched = {squares[7]['matched']} onClick = {onSquareClick}/>
+        <Square index = {4} catId = {squares[4]['id']} flipped = {squares[4]['flipped']} matched = {squares[4]['matched']} blobPath = {squares[4]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {5} catId = {squares[5]['id']} flipped = {squares[5]['flipped']} matched = {squares[5]['matched']} blobPath = {squares[5]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {6} catId = {squares[6]['id']} flipped = {squares[6]['flipped']} matched = {squares[6]['matched']} blobPath = {squares[6]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {7} catId = {squares[7]['id']} flipped = {squares[7]['flipped']} matched = {squares[7]['matched']} blobPath = {squares[7]['blobPath']} onClick = {onSquareClick}/>
       </div>
       <div className="board-row">
-        <Square index = {8} catId = {squares[8]['id']} flipped = {squares[8]['flipped']} matched = {squares[8]['matched']} onClick = {onSquareClick}/>
-        <Square index = {9} catId = {squares[9]['id']} flipped = {squares[9]['flipped']} matched = {squares[9]['matched']} onClick = {onSquareClick}/>
-        <Square index = {10} catId = {squares[10]['id']} flipped = {squares[10]['flipped']} matched = {squares[10]['matched']} onClick = {onSquareClick}/>
-        <Square index = {11} catId = {squares[11]['id']} flipped = {squares[11]['flipped']} matched = {squares[11]['matched']} onClick = {onSquareClick}/>
+        <Square index = {8} catId = {squares[8]['id']} flipped = {squares[8]['flipped']} matched = {squares[8]['matched']} blobPath = {squares[8]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {9} catId = {squares[9]['id']} flipped = {squares[9]['flipped']} matched = {squares[9]['matched']} blobPath = {squares[9]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {10} catId = {squares[10]['id']} flipped = {squares[10]['flipped']} matched = {squares[10]['matched']} blobPath = {squares[10]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {11} catId = {squares[11]['id']} flipped = {squares[11]['flipped']} matched = {squares[11]['matched']} blobPath = {squares[11]['blobPath']} onClick = {onSquareClick}/>
       </div>
     </div>
   )
@@ -212,7 +214,9 @@ function App() {
     .then((json) => json.map(({id}: {id: string}) => id))
     .then((catIds) => catIds.concat(catIds))
     .then((catIds) => setSwappedIds(randomize(catIds)))
-    }, []
+    
+    
+  }, []
   );
 
   function reset() {
