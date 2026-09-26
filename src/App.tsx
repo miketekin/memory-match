@@ -21,59 +21,17 @@ function getRandomInt(max: number) {
 
 
 function controlBoard(reset: () => void) {
-  /* how does a timer work?
-    when the timers state is true, it increments by 1 every second
-    how do we increment by 1 every second?
-    We could capture the start time then have the timer evaluate the current time
-    minus the start time and rerender that component every time it changes
-    how do we capture the start time?
-    Date.now() captures epoch time including ms
-    divide by 1000 to get seconds
-    
-    while the start state is true, run date.now() every second and subtract from the first capture?
-    If we're already running something every second, then we could just increment using that
-
-  */ 
-  //const [activity, setActivity] = useState("Start");
-  //const [activity, setActivity] = useState("Reset");
-
-  //let buttonClass = "start-button"
   let buttonClass = "reset-button"
-  //const [timer, setTimer] = useState(false);
-  //const time = 0;
 
-  
   function onActivityClick() {
-    // console.log("onActivityClick")
-    // if (activity == "Start") {
-    //   setActivity("Stop")
-    //   setTimer(true)
-    // }
-    // else {
-    //   setActivity("Start")
-    //   setTimer(false)
-    // }
     reset()
   }
-
-  // if (activity == "Start") {
-  //   buttonClass = "board-element start-button"
-  // }
-  // else {
-  //   buttonClass = "board-element stop-button"
-  // }
   
   return(
     <div className={buttonClass} onClick={onActivityClick}>Reset</div>
   )
-  // return(
-  //   <div className="control-board">
-  //       <div className={buttonClass} onClick={onActivityClick}>{activity}</div>
-  //       <div className="board-element timer">Time: 0.0</div>
-  //       <div className="board-element timer">Score: 0.0</div>
-  //   </div>
-  // )
 }
+
 
 function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 
@@ -92,7 +50,6 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   }
 
   function onSquareClick(index: number, id: string) {
-
     let tempSquares = [...squares]
     let flippedSquares: Array<number> = []
 
@@ -174,7 +131,6 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
       <div>Loading</div>
     )
   }
-  console.log(squares)
 
   return (
     <div className="game-board">
@@ -220,7 +176,6 @@ function App() {
   );
 
   function reset() {
-    console.log("reset")
     let newSwappedIds = [...swappedIds]
     setSwappedIds(randomize(newSwappedIds))
   }
