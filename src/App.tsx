@@ -135,22 +135,22 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   return (
     <div className="game-board">
       <div className="board-row">
-        <Square index = {0} catId = {squares[0]['id']} flipped = {squares[0]['flipped']} matched = {squares[0]['matched']} blobPath = {squares[0]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {1} catId = {squares[1]['id']} flipped = {squares[1]['flipped']} matched = {squares[1]['matched']} blobPath = {squares[1]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {2} catId = {squares[2]['id']} flipped = {squares[2]['flipped']} matched = {squares[2]['matched']} blobPath = {squares[2]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {3} catId = {squares[3]['id']} flipped = {squares[3]['flipped']} matched = {squares[3]['matched']} blobPath = {squares[3]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {0} {...squares[0]} onClick = {onSquareClick}/>
+        <Square index = {1} {...squares[1]} onClick = {onSquareClick}/>
+        <Square index = {2} {...squares[2]} onClick = {onSquareClick}/>
+        <Square index = {3} {...squares[3]} onClick = {onSquareClick}/>
       </div>
       <div className="board-row">
-        <Square index = {4} catId = {squares[4]['id']} flipped = {squares[4]['flipped']} matched = {squares[4]['matched']} blobPath = {squares[4]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {5} catId = {squares[5]['id']} flipped = {squares[5]['flipped']} matched = {squares[5]['matched']} blobPath = {squares[5]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {6} catId = {squares[6]['id']} flipped = {squares[6]['flipped']} matched = {squares[6]['matched']} blobPath = {squares[6]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {7} catId = {squares[7]['id']} flipped = {squares[7]['flipped']} matched = {squares[7]['matched']} blobPath = {squares[7]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {4} {...squares[4]} onClick = {onSquareClick}/>
+        <Square index = {5} {...squares[5]} onClick = {onSquareClick}/>
+        <Square index = {6} {...squares[6]} onClick = {onSquareClick}/>
+        <Square index = {7} {...squares[7]} onClick = {onSquareClick}/>
       </div>
       <div className="board-row">
-        <Square index = {8} catId = {squares[8]['id']} flipped = {squares[8]['flipped']} matched = {squares[8]['matched']} blobPath = {squares[8]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {9} catId = {squares[9]['id']} flipped = {squares[9]['flipped']} matched = {squares[9]['matched']} blobPath = {squares[9]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {10} catId = {squares[10]['id']} flipped = {squares[10]['flipped']} matched = {squares[10]['matched']} blobPath = {squares[10]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {11} catId = {squares[11]['id']} flipped = {squares[11]['flipped']} matched = {squares[11]['matched']} blobPath = {squares[11]['blobPath']} onClick = {onSquareClick}/>
+        <Square index = {8} {...squares[8]} onClick = {onSquareClick}/>
+        <Square index = {9} {...squares[9]} onClick = {onSquareClick}/>
+        <Square index = {10} {...squares[10]} onClick = {onSquareClick}/>
+        <Square index = {11} {...squares[11]} onClick = {onSquareClick}/>
       </div>
     </div>
   )
