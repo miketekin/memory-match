@@ -20,7 +20,7 @@ function getRandomInt(max: number) {
 }
 
 
-function controlBoard(reset: () => void) {
+function controlBoard(reset: () => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
   let buttonClass = "reset-button"
 
   function onActivityClick() {
@@ -28,7 +28,14 @@ function controlBoard(reset: () => void) {
   }
   
   return(
-    <div className={buttonClass} onClick={onActivityClick}>Reset</div>
+    <div>
+      <select className='difficulty-selector' value={difficulty} onChange={e => setDifficulty(e.target.value)}>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <button className={buttonClass} onClick={onActivityClick}>Reset</button>
+      </div>
   )
 }
 
@@ -74,7 +81,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
       //If there is only one, flip it then check if there's a match
       else if (flippedSquares.length == 1) {
         tempSquares[index]['flipped'] = true
-        if (tempSquares[flippedSquares[0]]['id'] == id) {
+        if (tempSquares[flippedSquares[0]]['catId'] == id) {
           tempSquares[flippedSquares[0]]['matched'] = true
           tempSquares[index]['matched'] = true
         }
@@ -91,7 +98,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   }
 
   interface item {
-    id: string,
+    catId: string,
     matched: boolean,
     flipped: boolean,
     blobPath: string
@@ -113,7 +120,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
       .then(blob=>{
         blobPath = URL.createObjectURL(blob)
         const item = {
-          id: swappedIds[id],
+          catId: swappedIds[id],
           matched: false,
           flipped: false,
           blobPath: blobPath
@@ -134,24 +141,9 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 
   return (
     <div className="game-board">
-      <div className="board-row">
-        <Square index = {0} catId = {squares[0]['id']} flipped = {squares[0]['flipped']} matched = {squares[0]['matched']} blobPath = {squares[0]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {1} catId = {squares[1]['id']} flipped = {squares[1]['flipped']} matched = {squares[1]['matched']} blobPath = {squares[1]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {2} catId = {squares[2]['id']} flipped = {squares[2]['flipped']} matched = {squares[2]['matched']} blobPath = {squares[2]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {3} catId = {squares[3]['id']} flipped = {squares[3]['flipped']} matched = {squares[3]['matched']} blobPath = {squares[3]['blobPath']} onClick = {onSquareClick}/>
-      </div>
-      <div className="board-row">
-        <Square index = {4} catId = {squares[4]['id']} flipped = {squares[4]['flipped']} matched = {squares[4]['matched']} blobPath = {squares[4]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {5} catId = {squares[5]['id']} flipped = {squares[5]['flipped']} matched = {squares[5]['matched']} blobPath = {squares[5]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {6} catId = {squares[6]['id']} flipped = {squares[6]['flipped']} matched = {squares[6]['matched']} blobPath = {squares[6]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {7} catId = {squares[7]['id']} flipped = {squares[7]['flipped']} matched = {squares[7]['matched']} blobPath = {squares[7]['blobPath']} onClick = {onSquareClick}/>
-      </div>
-      <div className="board-row">
-        <Square index = {8} catId = {squares[8]['id']} flipped = {squares[8]['flipped']} matched = {squares[8]['matched']} blobPath = {squares[8]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {9} catId = {squares[9]['id']} flipped = {squares[9]['flipped']} matched = {squares[9]['matched']} blobPath = {squares[9]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {10} catId = {squares[10]['id']} flipped = {squares[10]['flipped']} matched = {squares[10]['matched']} blobPath = {squares[10]['blobPath']} onClick = {onSquareClick}/>
-        <Square index = {11} catId = {squares[11]['id']} flipped = {squares[11]['flipped']} matched = {squares[11]['matched']} blobPath = {squares[11]['blobPath']} onClick = {onSquareClick}/>
-      </div>
+      {squares.map((item, itemIndex) => (
+        <Square index={itemIndex} {...squares[itemIndex]} onClick={onSquareClick}/>
+      ))}
     </div>
   )
 }
@@ -160,7 +152,9 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 
 
 function App() {
+  const [difficulty, setDifficulty] = useState('Easy')
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
+  
 
   useEffect(() => {
     console.log("getting new cats")
@@ -168,12 +162,22 @@ function App() {
     }, []
   );
 
+  useEffect(() => {
+    newCats(difficulty)
+  }, [difficulty])
+
   function reset() {
     newCats()
   }
 
-  async function newCats() {
-    const CATS = 6 // This needs to be the number of cats for the selected difficulty level
+  async function newCats(difficulty = 'Easy') {
+    const levels = {
+      Easy: 6,
+      Medium: 12,
+      Hard: 18,
+    }
+
+    const CATS = levels[difficulty as keyof typeof levels] // This needs to be the number of cats for the selected difficulty level
     let catIds = []
 
     try {
@@ -220,9 +224,9 @@ function App() {
 
     <div className="App-body">
       <div>
-        {controlBoard(reset)}
+        {controlBoard(reset, difficulty, setDifficulty)}
       </div>
-      <div className="game-board">
+      <div>
         {gameBoard({swappedIds})}
       </div>
     </div>
