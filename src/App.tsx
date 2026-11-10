@@ -22,10 +22,6 @@ function getRandomInt(max: number) {
 
 function controlBoard(reset: () => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
   let buttonClass = "reset-button"
-
-  function onActivityClick() {
-    reset()
-  }
   
   return(
     <div>
@@ -34,7 +30,7 @@ function controlBoard(reset: () => void, difficulty: string, setDifficulty: (dif
         <option value="Medium">Medium</option>
         <option value="Hard">Hard</option>
       </select>
-      <button className={buttonClass} onClick={onActivityClick}>Reset</button>
+      <button className={buttonClass} onClick={() => reset(difficulty)}>Reset</button>
       </div>
   )
 }
@@ -166,8 +162,8 @@ function App() {
     newCats(difficulty)
   }, [difficulty])
 
-  function reset() {
-    newCats()
+  function reset(difficulty: string) {
+    newCats(difficulty)
   }
 
   async function newCats(difficulty = 'Easy') {
