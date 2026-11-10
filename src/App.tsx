@@ -20,7 +20,7 @@ function getRandomInt(max: number) {
 }
 
 
-function controlBoard(reset: () => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
+function controlBoard(reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
   let buttonClass = "reset-button"
   
   return(
