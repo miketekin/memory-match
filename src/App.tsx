@@ -20,11 +20,12 @@ function getRandomInt(max: number) {
 }
 
 
-function controlBoard(reset: () => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
+function controlBoard(reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number) {
   let buttonClass = "reset-button"
   
   return(
-    <div>
+    <div className='control-board'>
+      <label className='score'>Count: {clicks}</label>
       <select className='difficulty-selector' value={difficulty} onChange={e => setDifficulty(e.target.value)}>
         <option value="Easy">Easy</option>
         <option value="Medium">Medium</option>
@@ -36,7 +37,7 @@ function controlBoard(reset: () => void, difficulty: string, setDifficulty: (dif
 }
 
 
-function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
+function gameBoard({swappedIds, clicks, setClicks}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void}) {
 
   function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
     if (!flipped && !matched) {
@@ -53,6 +54,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
   }
 
   function onSquareClick(index: number, id: string) {
+
     let tempSquares = [...squares]
     let flippedSquares: Array<number> = []
 
@@ -89,7 +91,9 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
         tempSquares[index]['flipped'] = true
       }
     }
-
+    
+    let newClicks = clicks + 1
+    setClicks(newClicks)
     setSquares(tempSquares)
   }
 
@@ -134,6 +138,7 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
       <div>Loading</div>
     )
   }
+    console.log('rendering')
 
   return (
     <div className="game-board">
@@ -150,6 +155,8 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 function App() {
   const [difficulty, setDifficulty] = useState('Easy')
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
+  const [clicks, setClicks] = useState(0)
+
   
 
   useEffect(() => {
@@ -159,10 +166,11 @@ function App() {
   );
 
   useEffect(() => {
-    newCats(difficulty)
+    reset(difficulty)
   }, [difficulty])
 
   function reset(difficulty: string) {
+    setClicks(0)
     newCats(difficulty)
   }
 
@@ -220,10 +228,10 @@ function App() {
 
     <div className="App-body">
       <div>
-        {controlBoard(reset, difficulty, setDifficulty)}
+        {controlBoard(reset, difficulty, setDifficulty, clicks)}
       </div>
       <div>
-        {gameBoard({swappedIds})}
+        {gameBoard({swappedIds, clicks, setClicks})}
       </div>
     </div>
 
