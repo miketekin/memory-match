@@ -51,6 +51,12 @@
 
 }
 
+.difficulty-selector {
+    min-width: 15vw;
+  min-height: 3vh;
+  text-align: center;
+}
+
 .board-element {
   border: 1px solid black;
   align-content: center;
@@ -76,6 +82,7 @@
 
 .game-board {
   display: grid;
+  grid-template-columns: repeat(6, 1fr);
 }
 
 
@@ -93,10 +100,10 @@
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 18vw;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 18vw;
+  width: 100%;
+  aspect-ratio: 1/1;
 }
