@@ -169,8 +169,7 @@ function App() {
   );
 
   function reset() {
-    let newSwappedIds = [...swappedIds]
-    setSwappedIds(randomize(newSwappedIds))
+    newCats()
   }
 
   async function newCats() {
