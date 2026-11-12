@@ -20,11 +20,7 @@ function getRandomInt(max: number) {
 }
 
 
-<<<<<<< HEAD
 function controlBoard(reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number) {
-=======
-function controlBoard(reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void) {
->>>>>>> origin/feat/customize-difficulty
   let buttonClass = "reset-button"
   
   return(
