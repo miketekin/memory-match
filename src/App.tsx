@@ -161,24 +161,52 @@ function gameBoard({swappedIds}: { swappedIds: Array<string> }) {
 
 function App() {
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
-  const skipMax: number = 1975;
-  const skip: number = getRandomInt(skipMax)
-  
+
   useEffect(() => {
-    fetch("https://cataas.com/api/cats?limit=6&skip="+skip)
-    .then((result) => result.json())
-    .then((json) => json.map(({id}: {id: string}) => id))
-    .then((catIds) => catIds.concat(catIds))
-    .then((catIds) => setSwappedIds(randomize(catIds)))
-    
-    
-  }, []
+    console.log("getting new cats")
+    newCats()
+    }, []
   );
 
   function reset() {
     let newSwappedIds = [...swappedIds]
     setSwappedIds(randomize(newSwappedIds))
   }
+
+  async function newCats() {
+    const CATS = 6 // This needs to be the number of cats for the selected difficulty level
+    let catIds = []
+
+    try {
+      const catCountResponse = await fetch("https://cataas.com/api/count")
+      const countData = await catCountResponse.json()
+      const totalCats = countData.count
+      const MAX_ATTEMPTS = 3
+      let attempts = 0
+
+      while (catIds.length < CATS && attempts < MAX_ATTEMPTS) {
+        attempts++
+        const skip = getRandomInt(totalCats - CATS)
+        const catsResponse = await fetch("https://cataas.com/api/cats?limit="+CATS+"&skip="+skip)
+        const catsData = await catsResponse.json()
+
+        for (const entry of catsData) {
+          if (entry.mimetype !== 'image/gif' && catIds.length < CATS) {
+            catIds.push(entry.id)
+          }
+        }
+      }
+    } catch (error) {
+      console.log(catIds)
+    }
+
+    const catCards = catIds.concat(catIds)
+    setSwappedIds(randomize(catCards))
+
+
+    }
+
+
 
   return(
   <div className="App">
