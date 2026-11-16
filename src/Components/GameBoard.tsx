@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import catSvg from './assets/cat-svg.svg'
+import catSvg from '../assets/cat-svg.svg'
 
 export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
 
