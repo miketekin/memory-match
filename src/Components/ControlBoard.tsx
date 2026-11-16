@@ -1,4 +1,11 @@
-export default function ControlBoard({reset, difficulty, setDifficulty, clicks}: {reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number}) {
+export interface ControlBoardProps {
+    difficulty: string,
+    setDifficulty: (difficulty: string) => void,
+    reset: (difficulty: string) => void,
+    clicks: number,
+}
+
+export default function ControlBoard({difficulty, setDifficulty, reset, clicks}: ControlBoardProps) {
   let buttonClass = "reset-button"
   
   return(

@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import catSvg from '../assets/cat-svg.svg'
 
-export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
+export interface GameBoardProps {
+    swappedIds: Array<string>,
+    clicks: number,
+    setClicks: (clicks:number) => void,
+    setGameOver: (gameOver: boolean) => void,
+}
+
+export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: GameBoardProps) {
 
   const CAT_COUNT = swappedIds.length / 2
 
