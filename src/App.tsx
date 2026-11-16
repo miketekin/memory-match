@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
-import catSvg from './assets/cat-svg.svg'
+//import catSvg from './assets/cat-svg.svg'
+import ControlBoard from './Components/ControlBoard.tsx'
+import GameBoard from './Components/GameBoard.tsx'
 import GameOver from './Components/GameOver.tsx'
 import './Components/GameOver.css'
 
@@ -22,150 +24,150 @@ function getRandomInt(max: number) {
 }
 
 
-function ControlBoard({reset, difficulty, setDifficulty, clicks}: {reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number}) {
-  let buttonClass = "reset-button"
+// function ControlBoard({reset, difficulty, setDifficulty, clicks}: {reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number}) {
+//   let buttonClass = "reset-button"
   
-  return(
-    <div className='control-board'>
-      <label className='score'>Count: {clicks}</label>
-      <select className='difficulty-selector' value={difficulty} onChange={e => setDifficulty(e.target.value)}>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-      </select>
-      <button className={buttonClass} onClick={() => reset(difficulty)}>Reset</button>
-      </div>
-  )
-}
+//   return(
+//     <div className='control-board'>
+//       <label className='score'>Count: {clicks}</label>
+//       <select className='difficulty-selector' value={difficulty} onChange={e => setDifficulty(e.target.value)}>
+//         <option value="Easy">Easy</option>
+//         <option value="Medium">Medium</option>
+//         <option value="Hard">Hard</option>
+//       </select>
+//       <button className={buttonClass} onClick={() => reset(difficulty)}>Reset</button>
+//       </div>
+//   )
+// }
 
   let matches = 0
 
-function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
+// function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
 
-  const CAT_COUNT = swappedIds.length / 2
+//   const CAT_COUNT = swappedIds.length / 2
 
-  //let countRef = useRef(0)
-
-
-  function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
-    if (!flipped && !matched) {
-      blobPath = catSvg
-    }
-
-    return (
-      <img 
-      src={blobPath}
-      className="square"
-      onClick={() => onClick(index, catId)}
-      ></img>
-    )
-  }
-
-  function onSquareClick(index: number, id: string) {
-
-    let tempSquares = [...squares]
-    let flippedSquares: Array<number> = []
-
-    //Check to see if the current square is face up
-    if (tempSquares[index]['flipped'] || tempSquares[index]['matched']) {
-      return;
-    }
-
-    else {
-      //Create a list of flipped squares
-      //When a square is clicked, derive the flipped squares from the array of squares
-      for (let i = 0; i < tempSquares.length; ++i) {
-        if (tempSquares[i]['flipped']) {
-          flippedSquares.push(i)
-        }
-      }      
-      //If this is the first one, just flip it
-      if (flippedSquares.length == 0) {
-        tempSquares[index]['flipped'] = true
-      }
-      //If there is only one, flip it then check if there's a match
-      else if (flippedSquares.length == 1) {
-        tempSquares[index]['flipped'] = true
-        if (tempSquares[flippedSquares[0]]['catId'] == id) {
-          tempSquares[flippedSquares[0]]['matched'] = true
-          tempSquares[index]['matched'] = true
-          //countRef.current++
-          matches++
-          //console.log('countRef.current', countRef.current)
-          //if (countRef.current === CAT_COUNT) {
-          if (matches === CAT_COUNT) {
-            //console.log('setting gameOver')
-            matches = 0
-            setGameOver(true)
-          }
+//   //let countRef = useRef(0)
 
 
-        }
-      }
-      //If there are already two, clear the existing flips and flip the clicked one
-      else {
-        tempSquares[flippedSquares[0]]['flipped'] = false
-        tempSquares[flippedSquares[1]]['flipped'] = false
-        tempSquares[index]['flipped'] = true
-      }
-    }
+//   function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
+//     if (!flipped && !matched) {
+//       blobPath = catSvg
+//     }
+
+//     return (
+//       <img 
+//       src={blobPath}
+//       className="square"
+//       onClick={() => onClick(index, catId)}
+//       ></img>
+//     )
+//   }
+
+//   function onSquareClick(index: number, id: string) {
+
+//     let tempSquares = [...squares]
+//     let flippedSquares: Array<number> = []
+
+//     //Check to see if the current square is face up
+//     if (tempSquares[index]['flipped'] || tempSquares[index]['matched']) {
+//       return;
+//     }
+
+//     else {
+//       //Create a list of flipped squares
+//       //When a square is clicked, derive the flipped squares from the array of squares
+//       for (let i = 0; i < tempSquares.length; ++i) {
+//         if (tempSquares[i]['flipped']) {
+//           flippedSquares.push(i)
+//         }
+//       }      
+//       //If this is the first one, just flip it
+//       if (flippedSquares.length == 0) {
+//         tempSquares[index]['flipped'] = true
+//       }
+//       //If there is only one, flip it then check if there's a match
+//       else if (flippedSquares.length == 1) {
+//         tempSquares[index]['flipped'] = true
+//         if (tempSquares[flippedSquares[0]]['catId'] == id) {
+//           tempSquares[flippedSquares[0]]['matched'] = true
+//           tempSquares[index]['matched'] = true
+//           //countRef.current++
+//           matches++
+//           //console.log('countRef.current', countRef.current)
+//           //if (countRef.current === CAT_COUNT) {
+//           if (matches === CAT_COUNT) {
+//             //console.log('setting gameOver')
+//             matches = 0
+//             setGameOver(true)
+//           }
+
+
+//         }
+//       }
+//       //If there are already two, clear the existing flips and flip the clicked one
+//       else {
+//         tempSquares[flippedSquares[0]]['flipped'] = false
+//         tempSquares[flippedSquares[1]]['flipped'] = false
+//         tempSquares[index]['flipped'] = true
+//       }
+//     }
     
-    let newClicks = clicks + 1
-    setClicks(newClicks)
-    setSquares(tempSquares)
-  }
+//     let newClicks = clicks + 1
+//     setClicks(newClicks)
+//     setSquares(tempSquares)
+//   }
 
-  interface item {
-    catId: string,
-    matched: boolean,
-    flipped: boolean,
-    blobPath: string
-  }
+//   interface item {
+//     catId: string,
+//     matched: boolean,
+//     flipped: boolean,
+//     blobPath: string
+//   }
 
-  let [squares, setSquares] = useState<item[]>([])
-
-
-  const basePath = "https://cataas.com/cat/"
-  const params = "?type=square&position=center"
-
-  useEffect(() => {
-    squares = []
-    for (const id in swappedIds) {
-      console.log("swapped", swappedIds[id])
-      let blobPath = null
-      fetch(basePath+swappedIds[id]+params)
-      .then(res=>res.blob())
-      .then(blob=>{
-        blobPath = URL.createObjectURL(blob)
-        const item = {
-          catId: swappedIds[id],
-          matched: false,
-          flipped: false,
-          blobPath: blobPath
-        }
-        squares.push(item)
-        let tempSquares = [...squares]
-        setSquares(tempSquares)
-      })
-    }
-  }, [swappedIds]);
+//   let [squares, setSquares] = useState<item[]>([])
 
 
-  if (squares.length < 12) {
-    return (
-      <div>Loading</div>
-    )
-  }
-    console.log('rendering')
+//   const basePath = "https://cataas.com/cat/"
+//   const params = "?type=square&position=center"
 
-  return (
-    <div className="game-board">
-      {squares.map((item, itemIndex) => (
-        <Square index={itemIndex} {...squares[itemIndex]} onClick={onSquareClick}/>
-      ))}
-    </div>
-  )
-}
+//   useEffect(() => {
+//     squares = []
+//     for (const id in swappedIds) {
+//       console.log("swapped", swappedIds[id])
+//       let blobPath = null
+//       fetch(basePath+swappedIds[id]+params)
+//       .then(res=>res.blob())
+//       .then(blob=>{
+//         blobPath = URL.createObjectURL(blob)
+//         const item = {
+//           catId: swappedIds[id],
+//           matched: false,
+//           flipped: false,
+//           blobPath: blobPath
+//         }
+//         squares.push(item)
+//         let tempSquares = [...squares]
+//         setSquares(tempSquares)
+//       })
+//     }
+//   }, [swappedIds]);
+
+
+//   if (squares.length < 12) {
+//     return (
+//       <div>Loading</div>
+//     )
+//   }
+//     console.log('rendering')
+
+//   return (
+//     <div className="game-board">
+//       {squares.map((item, itemIndex) => (
+//         <Square index={itemIndex} {...squares[itemIndex]} onClick={onSquareClick}/>
+//       ))}
+//     </div>
+//   )
+// }
 
 
 
