@@ -1,3 +1,5 @@
+import './ControlBoard.css'
+
 export interface ControlBoardProps {
     difficulty: string,
     setDifficulty: (difficulty: string) => void,

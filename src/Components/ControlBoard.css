@@ -1,0 +1,26 @@
+.control-board {
+  margin-bottom: 60px;
+  display: grid;
+  color: black;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.score,
+.reset-button,
+.difficulty-selector {
+  display: flex;
+  font-size: 1rem;
+  justify-content: center;
+  padding: 8px 12px;
+  align-items: center;
+}
+
+.score {
+  background: white;
+  color: black;
+  font-weight: 500;
+}
+
+.reset-button {
+  background: #d62828;
+}

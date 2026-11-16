@@ -1,4 +1,5 @@
 import catSvg from '../assets/cat-svg.svg'
+import './Square.css'
 
 export interface SquareModel {
     catId: string,

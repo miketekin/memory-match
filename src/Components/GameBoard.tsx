@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Square from './Square.tsx'
+import './GameBoard.css'
 
 export interface GameBoardProps {
     swappedIds: Array<string>,
