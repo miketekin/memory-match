@@ -22,7 +22,7 @@ function getRandomInt(max: number) {
 }
 
 
-function controlBoard(reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number) {
+function ControlBoard({reset, difficulty, setDifficulty, clicks}: {reset: (difficulty: string) => void, difficulty: string, setDifficulty: (difficulty: string) => void, clicks: number}) {
   let buttonClass = "reset-button"
   
   return(
@@ -40,7 +40,7 @@ function controlBoard(reset: (difficulty: string) => void, difficulty: string, s
 
   let matches = 0
 
-function gameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
+function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
 
   const CAT_COUNT = swappedIds.length / 2
 
@@ -256,10 +256,10 @@ function App() {
       <GameOver ref={dialog} cat_count={cat_count} clicks={clicks} reset={(difficulty) => reset(difficulty)}/>
 
       <div>
-        {controlBoard(reset, difficulty, setDifficulty, clicks)}
+        {ControlBoard({reset, difficulty, setDifficulty, clicks})}
       </div>
       <div>
-        {gameBoard({swappedIds, clicks, setClicks, setGameOver})}
+        {GameBoard({swappedIds, clicks, setClicks, setGameOver})}
       </div>
     </div>
 
