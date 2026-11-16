@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import catSvg from './assets/cat-svg.svg'
+import GameOver from './Components/GameOver.tsx'
+import './Components/GameOver.css'
 
 
 function randomize(catIds: Array<string>) {
@@ -36,8 +38,14 @@ function controlBoard(reset: (difficulty: string) => void, difficulty: string, s
   )
 }
 
+  let matches = 0
 
-function gameBoard({swappedIds, clicks, setClicks}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void}) {
+function gameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
+
+  const CAT_COUNT = swappedIds.length / 2
+
+  //let countRef = useRef(0)
+
 
   function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
     if (!flipped && !matched) {
@@ -65,7 +73,6 @@ function gameBoard({swappedIds, clicks, setClicks}: { swappedIds: Array<string>,
 
     else {
       //Create a list of flipped squares
-
       //When a square is clicked, derive the flipped squares from the array of squares
       for (let i = 0; i < tempSquares.length; ++i) {
         if (tempSquares[i]['flipped']) {
@@ -82,6 +89,17 @@ function gameBoard({swappedIds, clicks, setClicks}: { swappedIds: Array<string>,
         if (tempSquares[flippedSquares[0]]['catId'] == id) {
           tempSquares[flippedSquares[0]]['matched'] = true
           tempSquares[index]['matched'] = true
+          //countRef.current++
+          matches++
+          //console.log('countRef.current', countRef.current)
+          //if (countRef.current === CAT_COUNT) {
+          if (matches === CAT_COUNT) {
+            //console.log('setting gameOver')
+            matches = 0
+            setGameOver(true)
+          }
+
+
         }
       }
       //If there are already two, clear the existing flips and flip the clicked one
@@ -151,12 +169,14 @@ function gameBoard({swappedIds, clicks, setClicks}: { swappedIds: Array<string>,
 
 
 
-
 function App() {
   const [difficulty, setDifficulty] = useState('Easy')
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
   const [clicks, setClicks] = useState(0)
+  const [gameOver, setGameOver] = useState(false)
+  const dialog = useRef(null)
 
+  let cat_count = 6
   
 
   useEffect(() => {
@@ -169,7 +189,13 @@ function App() {
     reset(difficulty)
   }, [difficulty])
 
+  useEffect(() => {
+    console.log('gameover useeffect')
+    gameOver && dialog.current.showModal()
+  }, [gameOver])
+
   function reset(difficulty: string) {
+    setGameOver(false)
     setClicks(0)
     newCats(difficulty)
   }
@@ -181,24 +207,24 @@ function App() {
       Hard: 18,
     }
 
-    const CATS = levels[difficulty as keyof typeof levels] // This needs to be the number of cats for the selected difficulty level
+    cat_count = levels[difficulty as keyof typeof levels] // This needs to be the number of cats for the selected difficulty level
     let catIds = []
 
     try {
       const catCountResponse = await fetch("https://cataas.com/api/count")
       const countData = await catCountResponse.json()
-      const totalCats = countData.count
+      const availableCatCount = countData.count
       const MAX_ATTEMPTS = 3
       let attempts = 0
 
-      while (catIds.length < CATS && attempts < MAX_ATTEMPTS) {
+      while (catIds.length < cat_count && attempts < MAX_ATTEMPTS) {
         attempts++
-        const skip = getRandomInt(totalCats - CATS)
-        const catsResponse = await fetch("https://cataas.com/api/cats?limit="+CATS+"&skip="+skip)
+        const skip = getRandomInt(availableCatCount - cat_count)
+        const catsResponse = await fetch("https://cataas.com/api/cats?limit="+cat_count+"&skip="+skip)
         const catsData = await catsResponse.json()
 
         for (const entry of catsData) {
-          if (entry.mimetype !== 'image/gif' && catIds.length < CATS) {
+          if (entry.mimetype !== 'image/gif' && catIds.length < cat_count) {
             catIds.push(entry.id)
           }
         }
@@ -214,7 +240,7 @@ function App() {
     }
 
 
-
+  console.log('gameover', gameOver)
   return(
   <div className="App">
     <header className="App-header">
@@ -225,13 +251,15 @@ function App() {
         Memory matching game
       </p>
     </header>
-
+    
     <div className="App-body">
+      <GameOver ref={dialog} cat_count={cat_count} clicks={clicks} reset={(difficulty) => reset(difficulty)}/>
+
       <div>
         {controlBoard(reset, difficulty, setDifficulty, clicks)}
       </div>
       <div>
-        {gameBoard({swappedIds, clicks, setClicks})}
+        {gameBoard({swappedIds, clicks, setClicks, setGameOver})}
       </div>
     </div>
 
