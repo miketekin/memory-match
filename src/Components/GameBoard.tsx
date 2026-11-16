@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import catSvg from './assets/cat-svg.svg'
 
 export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: { swappedIds: Array<string>, clicks: number, setClicks: (clicks: number) => void, setGameOver: (gameOver: boolean) => void}) {
 
   const CAT_COUNT = swappedIds.length / 2
 
-  //let countRef = useRef(0)
+  let countRef = useRef(0)
 
 
   function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
@@ -50,13 +50,14 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
         if (tempSquares[flippedSquares[0]]['catId'] == id) {
           tempSquares[flippedSquares[0]]['matched'] = true
           tempSquares[index]['matched'] = true
-          //countRef.current++
-          matches++
+          countRef.current++
+          //matches++
           //console.log('countRef.current', countRef.current)
-          //if (countRef.current === CAT_COUNT) {
-          if (matches === CAT_COUNT) {
+          if (countRef.current === CAT_COUNT) {
+          //if (matches === CAT_COUNT) {
             //console.log('setting gameOver')
-            matches = 0
+            countRef.current = 0
+            //matches = 0
             setGameOver(true)
           }
 
