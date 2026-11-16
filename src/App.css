@@ -34,27 +34,28 @@
 .control-board {
   margin-bottom: 60px;
   display: grid;
-  min-width: 50vw;
   color: black;
-  background: white;
-  grid-template-rows: 1fr;
   grid-template-columns: repeat(3,1fr);
-  min-height: 3vh;
+}
+
+.score,
+.reset-button,
+.difficulty-selector {
+  display: flex;
+  font-size: 1rem;
+  justify-content: center;
+  padding: 8px 12px;
+  align-items: center;
+}
+
+.score {
+  background: white;
+  color: black;
+  font-weight: 500;
 }
 
 .reset-button {
   background: #d62828;
-  margin-bottom: 60px;
-  min-width: 15vw;
-  min-height: 3vh;
-  align-content: center;
-
-}
-
-.difficulty-selector {
-    min-width: 15vw;
-  min-height: 3vh;
-  text-align: center;
 }
 
 .board-element {
