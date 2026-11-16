@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import catSvg from '../assets/cat-svg.svg'
+import Square from './Square.tsx'
 
 export interface GameBoardProps {
     swappedIds: Array<string>,
@@ -13,21 +13,6 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
   const CAT_COUNT = swappedIds.length / 2
 
   let countRef = useRef(0)
-
-
-  function Square({ index, catId, flipped, matched, blobPath, onClick }: {index: number, catId: string, flipped: boolean, matched: boolean, blobPath: string, onClick: (index: number, catId: string) => void}) {
-    if (!flipped && !matched) {
-      blobPath = catSvg
-    }
-
-    return (
-      <img 
-      src={blobPath}
-      className="square"
-      onClick={() => onClick(index, catId)}
-      ></img>
-    )
-  }
 
   function onSquareClick(index: number, id: string) {
 

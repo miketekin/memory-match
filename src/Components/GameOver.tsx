@@ -1,4 +1,12 @@
-export default function GameOver({ref, cat_count, clicks, difficulty, reset}: {ref: HTMLDialogElement, cat_count: number, clicks: number, difficulty: string, reset: (difficulty: string) => void}) {
+export interface GameOverProps {
+    ref: HTMLDialogElement,
+    cat_count: number,
+    clicks: number,
+    difficulty: string,
+    reset: (difficulty: string) => void,
+}
+
+export default function GameOver({ref, cat_count, clicks, difficulty, reset}: GameOverProps) {
     
     const score = (clicks: number) => {
         const cards = cat_count * 2
@@ -14,7 +22,7 @@ export default function GameOver({ref, cat_count, clicks, difficulty, reset}: {r
         } else {
             return "Better luck next time!"
         }
-        
+
     }
     
     return (
