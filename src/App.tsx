@@ -22,8 +22,6 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-  let matches = 0
-
 function App() {
   const [difficulty, setDifficulty] = useState('Easy')
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
