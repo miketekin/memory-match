@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import ControlBoard from './Components/ControlBoard.tsx'
 import GameBoard from './Components/GameBoard.tsx'
@@ -7,7 +7,7 @@ import './Components/GameOver.css'
 
 
 function randomize(catIds: Array<string>) {
-  let arrayCopy = catIds
+  let arrayCopy = [...catIds]
   for (let i = 11; i >= 0; i--) {
     let tmp = arrayCopy[i]
     let randomInt = getRandomInt(i)
@@ -31,6 +31,10 @@ function App() {
 
   let cat_count = 6
   
+  useEffect(() => {
+    console.log('setting swappedIds', swappedIds)
+    
+  },[swappedIds])
 
   useEffect(() => {
     console.log("getting new cats")
@@ -81,13 +85,27 @@ function App() {
             catIds.push(entry.id)
           }
         }
+        console.log('while cats', catIds)
       }
     } catch (error) {
-      console.log(catIds)
+      console.log('ahhhh', catIds)
     }
 
-    const catCards = catIds.concat(catIds)
-    setSwappedIds(randomize(catCards))
+    await Promise.all(catIds)
+    catIds = catIds.concat(catIds)
+    console.log('cat ids', catIds)
+    //console.log('catCards', catCards)
+    //const randomizedCards = randomize(catCards)
+    //console.log('randomized', randomizedCards)
+    console.log('setting new ids')
+    catIds = randomize(catIds)
+    console.log('randomized cat ids', catIds)
+    const swappedCatsIds = [...catIds]
+    setSwappedIds([...swappedCatsIds])
+    // this.setSwappedIds({swappedBruh}), () => {
+    //   console.log("swappppped", this.swappedIds)
+    // }
+    console.log('i set it to ', swappedCatsIds)
 
 
     }
