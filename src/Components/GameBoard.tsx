@@ -116,7 +116,7 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
   return (
     <div className="game-board">
       {squares.map((item, itemIndex) => (
-        <Square index={itemIndex} {...squares[itemIndex]} onClick={onSquareClick}/>
+        <Square index={itemIndex} model={squares[itemIndex]} onClick={onSquareClick}/>
       ))}
     </div>
   )
