@@ -61,7 +61,7 @@ function App() {
     let catIds = []
 
     try {
-      const catCountResponse = await fetch("https://cataass.com/api/count")
+      const catCountResponse = await fetch("https://cataas.com/api/count")
       if (!catCountResponse.ok) {
         throw new Error('Failed to get cat ids')
       }
@@ -73,7 +73,7 @@ function App() {
       while (catIds.length < cat_count && attempts < MAX_ATTEMPTS) {
         attempts++
         const skip = getRandomInt(availableCatCount - cat_count)
-        const catsResponse = await fetch("https://cataass.com/api/cats?limit="+cat_count+"&skip="+skip)
+        const catsResponse = await fetch("https://cataas.com/api/cats?limit="+cat_count+"&skip="+skip)
         if (!catsResponse.ok) {
           throw new Error('Failed to get cats')
         }
