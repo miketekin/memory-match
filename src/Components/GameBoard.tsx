@@ -20,18 +20,6 @@ function randomize(catcards: Array<item>) {
   return arrayCopy;
 }
 
-// function randomize(catIds: Array<string>) {
-//   let arrayCopy = [...catIds]
-//   for (let i = 11; i >= 0; i--) {
-//     let tmp = arrayCopy[i]
-//     let randomInt = getRandomInt(i)
-//     arrayCopy[i] = arrayCopy[randomInt]
-//     arrayCopy[randomInt] = tmp
-//   }
-//   return arrayCopy;
-// }
-
-
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
@@ -104,30 +92,17 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
     setSquares(tempSquares)
   }
 
-  // interface item {
-  //   catId: string,
-  //   matched: boolean,
-  //   flipped: boolean,
-  //   blobPath: string
-  // }
-
   let [squares, setSquares] = useState<item[]>([])
-
 
   const basePath = "https://cataas.com/cat/"
   const params = "?type=square&position=center"
 
 
   useEffect(() => {
-    console.log('effect')
-    //let tempPaths: Array<string> = []
 
     async function fetchPaths() {
       let tempSquares: Array<item> = []
-      console.log('swappedIds', swappedIds)
       for (const id in swappedIds) {
-        console.log('id', id)
-        console.log("swapped", swappedIds[id])
         let catUrl = await fetch(basePath+swappedIds[id]+params)
         let catBlob = await catUrl.blob()
         let catBlobPath = URL.createObjectURL(catBlob)
@@ -140,105 +115,14 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
         tempSquares.push(item)
       }
       await Promise.all(tempSquares)
-      console.log(tempSquares)
       tempSquares = randomize(tempSquares)
-      // tempSquares = tempPaths.map((path, index) => {
-      //   const item = {
-      //     catId: swappedIds[index],
-      //     matched: false,
-      //     flipped: false,
-      //     blobPath: path,
-      //   }
-      //   return item
-      // })
-      console.log('setting squares', tempSquares)
       setSquares(tempSquares)
     }
+
+    if (swappedIds.length <= 1) return
     fetchPaths()
+
   }, [swappedIds])
-
-
-  // useEffect(() => {
-  //   console.log('effect')
-  //   let tempSquares: Array<item> = []
-  //   let tempPaths: Array<string> = []
-
-  //   async function fetchPaths() {
-  //     for (const id in swappedIds) {
-  //       console.log('id', id)
-  //       console.log("swapped", swappedIds[id])
-  //       let catUrl = await fetch(basePath+swappedIds[id]+params)
-  //       let catBlob = await catUrl.blob()
-  //       let catBlobPath = URL.createObjectURL(catBlob)
-  //       tempPaths.push(catBlobPath)
-  //     }
-  //     await Promise.all(tempPaths)
-  //     tempPaths = randomize(tempPaths)
-  //     tempSquares = tempPaths.map((path, index) => {
-  //       const item = {
-  //         catId: swappedIds[index],
-  //         matched: false,
-  //         flipped: false,
-  //         blobPath: path,
-  //       }
-  //       return item
-  //     })
-  //     setSquares(tempSquares)
-  //   }
-  //   fetchPaths()
-  // }, [swappedIds])
-
-
-    //   tempSquares = Promise.all(tempPaths).then((tempPaths)=>{
-    //     tempPaths = randomize(tempPaths)
-    //     tempSquares = tempPaths.map((path, index) => {
-    //       const item = {
-    //         catId: swappedIds[index],
-    //         matched: false,
-    //         flipped: false,
-    //         blobPath: path,
-    //       }
-    //       return item
-    //     })
-    //     return tempSquares
-
-    //   })
-    //   }
-    
-    // setSquares(tempSquares)
-
-    // }, [swappedIds])
-
-  // useEffect(() => {
-  //   //squares = []
-  //   let tempIds: Array<string> = []
-  //   let tempSquares: Array<item> = []
-  //   for (const id in swappedIds) {
-  //     console.log("swapped", swappedIds[id])
-  //     let blobPath = null
-  //     fetch(basePath+swappedIds[id]+params)
-  //     .then(res=>res.blob())
-  //     .then(blob=>{
-  //       blobPath = URL.createObjectURL(blob)
-  //       // const item = {
-  //       //   catId: swappedIds[id],
-  //       //   matched: false,
-  //       //   flipped: false,
-  //       //   blobPath: blobPath
-  //       // }
-  //       //squares.push(item)
-  //       console.log('pushed ', id)
-  //       tempIds.push(blobPath)
-  //       //tempSquares.push(item)
-  //       //let tempSquares = [...squares]
-  //       //setSquares(tempSquares)
-  //     })
-  //   }
-  //   //tempSquares = [...squares]
-  //   tempIds = randomize(tempIds)
-  //   setSquares(tempSquares)
-
-  // }, [swappedIds]);
 
 
   if (squares.length < 12) {
@@ -246,7 +130,6 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
       <div>Loading</div>
     )
   }
-    console.log('rendering')
 
   return (
     <div className="game-board">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import ControlBoard from './Components/ControlBoard.tsx'
 import GameBoard from './Components/GameBoard.tsx'
@@ -30,14 +30,8 @@ function App() {
   const dialog = useRef(null)
 
   let cat_count = 6
-  
-  useEffect(() => {
-    console.log('setting swappedIds', swappedIds)
-    
-  },[swappedIds])
 
   useEffect(() => {
-    console.log("getting new cats")
     newCats()
     }, []
   );
@@ -47,7 +41,6 @@ function App() {
   }, [difficulty])
 
   useEffect(() => {
-    console.log('gameover useeffect')
     gameOver && dialog.current.showModal()
   }, [gameOver])
 
@@ -85,7 +78,6 @@ function App() {
             catIds.push(entry.id)
           }
         }
-        console.log('while cats', catIds)
       }
     } catch (error) {
       console.log('ahhhh', catIds)
@@ -93,25 +85,11 @@ function App() {
 
     await Promise.all(catIds)
     catIds = catIds.concat(catIds)
-    console.log('cat ids', catIds)
-    //console.log('catCards', catCards)
-    //const randomizedCards = randomize(catCards)
-    //console.log('randomized', randomizedCards)
-    console.log('setting new ids')
     catIds = randomize(catIds)
-    console.log('randomized cat ids', catIds)
-    const swappedCatsIds = [...catIds]
-    setSwappedIds([...swappedCatsIds])
-    // this.setSwappedIds({swappedBruh}), () => {
-    //   console.log("swappppped", this.swappedIds)
-    // }
-    console.log('i set it to ', swappedCatsIds)
-
-
+    setSwappedIds([...catIds])
     }
 
 
-  console.log('gameover', gameOver)
   return(
   <div className="App">
     <header className="App-header">
