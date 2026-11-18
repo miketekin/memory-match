@@ -4,23 +4,7 @@ import ControlBoard from './Components/ControlBoard.tsx'
 import GameBoard from './Components/GameBoard.tsx'
 import GameOver from './Components/GameOver.tsx'
 import './Components/GameOver.css'
-
-
-function randomize(catIds: Array<string>) {
-  let arrayCopy = [...catIds]
-  for (let i = 11; i >= 0; i--) {
-    let tmp = arrayCopy[i]
-    let randomInt = getRandomInt(i)
-    arrayCopy[i] = arrayCopy[randomInt]
-    arrayCopy[randomInt] = tmp
-  }
-  return arrayCopy;
-}
-
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
+import { getRandomInt } from './utilities.ts'
 
 function App() {
   const [difficulty, setDifficulty] = useState('Easy')
@@ -85,7 +69,6 @@ function App() {
 
     await Promise.all(catIds)
     catIds = catIds.concat(catIds)
-    catIds = randomize(catIds)
     setSwappedIds([...catIds])
     }
 
