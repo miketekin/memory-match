@@ -31,9 +31,7 @@ export interface GameBoardProps {
     setGameOver: (gameOver: boolean) => void,
 }
 
-export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: GameBoardProps) {
-  console.log('the ids are ', swappedIds)
-  
+export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: GameBoardProps) {  
   const [error, setError] = useState(false)
 
   const CAT_COUNT = swappedIds.length / 2
@@ -69,13 +67,8 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
           tempSquares[flippedSquares[0]]['matched'] = true
           tempSquares[index]['matched'] = true
           countRef.current++
-          //matches++
-          //console.log('countRef.current', countRef.current)
           if (countRef.current === CAT_COUNT) {
-          //if (matches === CAT_COUNT) {
-            //console.log('setting gameOver')
             countRef.current = 0
-            //matches = 0
             setGameOver(true)
           }
 
@@ -143,17 +136,14 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
     )
   }
 
-  if (squares.length < 12) {
-    return (
-      <div>Loading</div>
-    )
-  }
-
   return (
+    squares.length < 12 ?
+    <div>Loading</div> :
     <div className="game-board">
-      {squares.map((item, itemIndex) => (
+      {squares.map((_item, itemIndex) => (
         <Square index={itemIndex} model={squares[itemIndex]} onClick={onSquareClick}/>
       ))}
     </div>
   )
+
 }

@@ -1,5 +1,7 @@
+import React from 'react'
+
 export interface GameOverProps {
-    ref: HTMLDialogElement,
+    ref: React.Ref<HTMLDialogElement>,
     cat_count: number,
     clicks: number,
     difficulty: string,
