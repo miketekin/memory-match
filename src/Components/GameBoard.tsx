@@ -33,6 +33,9 @@ export interface GameBoardProps {
 
 export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: GameBoardProps) {
   console.log('the ids are ', swappedIds)
+  
+  const [error, setError] = useState(false)
+
   const CAT_COUNT = swappedIds.length / 2
 
   let countRef = useRef(0)
@@ -101,22 +104,31 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
   useEffect(() => {
 
     async function fetchPaths() {
-      let tempSquares: Array<item> = []
-      for (const id in swappedIds) {
-        let catUrl = await fetch(basePath+swappedIds[id]+params)
-        let catBlob = await catUrl.blob()
-        let catBlobPath = URL.createObjectURL(catBlob)
-        const item = {
-          catId: swappedIds[id],
-          matched: false,
-          flipped: false,
-          blobPath: catBlobPath,
+      try{
+        let tempSquares: Array<item> = []
+        for (const id in swappedIds) {
+          let catResp = await fetch(basePath+swappedIds[id]+params)
+          if (!catResp.ok) {
+            throw new Error('Failed to get cat images')
+          }
+          let catBlob = await catResp.blob()
+          let catBlobPath = URL.createObjectURL(catBlob)
+          const item = {
+            catId: swappedIds[id],
+            matched: false,
+            flipped: false,
+            blobPath: catBlobPath,
+          }
+          tempSquares.push(item)
         }
-        tempSquares.push(item)
+        await Promise.all(tempSquares)
+        tempSquares = randomize(tempSquares)
+        setSquares(tempSquares)
+      } catch (error) {
+        console.log('error', error)
+        setError(true)
       }
-      await Promise.all(tempSquares)
-      tempSquares = randomize(tempSquares)
-      setSquares(tempSquares)
+
     }
 
     if (swappedIds.length <= 1) return
@@ -124,6 +136,11 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
 
   }, [swappedIds])
 
+  if (error) {
+    return (
+    <div>Failed to get cats. Please try again later.</div>
+    )
+  }
 
   if (squares.length < 12) {
     return (
