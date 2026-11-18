@@ -44,10 +44,10 @@ function App() {
     gameOver && dialog.current.showModal()
   }, [gameOver])
 
-  function reset(difficulty: string) {
+  async function reset(difficulty: string) {
     setGameOver(false)
+    await newCats(difficulty)
     setClicks(0)
-    newCats(difficulty)
   }
 
   async function newCats(difficulty = 'Easy') {
