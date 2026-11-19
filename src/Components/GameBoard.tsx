@@ -102,6 +102,7 @@ export default function GameBoard({swappedIds, clicks, setClicks, setGameOver}: 
 
 
   useEffect(() => {
+    setSquares([])
 
     async function fetchPaths() {
       try{
