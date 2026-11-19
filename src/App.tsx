@@ -27,7 +27,7 @@ function App() {
   const [swappedIds, setSwappedIds] = useState<string[]>([""]);
   const [clicks, setClicks] = useState(0)
   const [gameOver, setGameOver] = useState(false)
-  const dialog = useRef(null)
+  const dialog = useRef<HTMLDialogElement>(null)
 
   let cat_count = 6
 
@@ -41,7 +41,7 @@ function App() {
   }, [difficulty])
 
   useEffect(() => {
-    gameOver && dialog.current.showModal()
+    gameOver && dialog.current?.showModal()
   }, [gameOver])
 
   async function reset(difficulty: string) {
@@ -57,7 +57,7 @@ function App() {
       Hard: 18,
     }
 
-    cat_count = levels[difficulty as keyof typeof levels] // This needs to be the number of cats for the selected difficulty level
+    cat_count = levels[difficulty as keyof typeof levels]
     let catIds = []
 
     try {
@@ -108,7 +108,7 @@ function App() {
     </header>
     
     <div className="App-body">
-      <GameOver ref={dialog} cat_count={cat_count} clicks={clicks} reset={(difficulty) => reset(difficulty)}/>
+      <GameOver ref={dialog} cat_count={cat_count} clicks={clicks} difficulty={difficulty} reset={(difficulty) => reset(difficulty)}/>
 
       <div>
         {ControlBoard({reset, difficulty, setDifficulty, clicks})}
