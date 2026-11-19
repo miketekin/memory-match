@@ -7,7 +7,7 @@ import './Components/GameOver.css'
 
 
 function randomize(catIds: Array<string>) {
-  let arrayCopy = catIds
+  let arrayCopy = [...catIds]
   for (let i = 11; i >= 0; i--) {
     let tmp = arrayCopy[i]
     let randomInt = getRandomInt(i)
@@ -30,10 +30,8 @@ function App() {
   const dialog = useRef(null)
 
   let cat_count = 6
-  
 
   useEffect(() => {
-    console.log("getting new cats")
     newCats()
     }, []
   );
@@ -43,7 +41,6 @@ function App() {
   }, [difficulty])
 
   useEffect(() => {
-    console.log('gameover useeffect')
     gameOver && dialog.current.showModal()
   }, [gameOver])
 
@@ -83,17 +80,16 @@ function App() {
         }
       }
     } catch (error) {
-      console.log(catIds)
+      console.log('ahhhh', catIds)
     }
 
-    const catCards = catIds.concat(catIds)
-    setSwappedIds(randomize(catCards))
-
-
+    await Promise.all(catIds)
+    catIds = catIds.concat(catIds)
+    catIds = randomize(catIds)
+    setSwappedIds([...catIds])
     }
 
 
-  console.log('gameover', gameOver)
   return(
   <div className="App">
     <header className="App-header">
