@@ -30,34 +30,6 @@
   font-size: 0.75rem;
 }
 
-
-.control-board {
-  margin-bottom: 60px;
-  display: grid;
-  color: black;
-  grid-template-columns: repeat(3,1fr);
-}
-
-.score,
-.reset-button,
-.difficulty-selector {
-  display: flex;
-  font-size: 1rem;
-  justify-content: center;
-  padding: 8px 12px;
-  align-items: center;
-}
-
-.score {
-  background: white;
-  color: black;
-  font-weight: 500;
-}
-
-.reset-button {
-  background: #d62828;
-}
-
 .board-element {
   border: 1px solid black;
   align-content: center;
@@ -80,31 +52,8 @@
   justify-items: end;
 }
 
-
-.game-board {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-}
-
-
 .board-row:after {
   clear: both;
   content: '';
   display: table;
-}
-
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 100%;
-  aspect-ratio: 1/1;
 }
